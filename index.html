@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Campus Tracker | Retro-Futurist OS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div class="glitch-logo" data-text="SMART CAMPUS">SMART CAMPUS</div>
+        <h2>SYSTEM v4.0.2 - STABLE BUILD</h2>
+        <button class="start-btn" onclick="startSystem()">Initialize System</button>
+    </div>
+
+    <!-- App Container -->
+    <div id="app-container">
+        <aside>
+            <div id="system-header">
+                <h1>CAMPUS_OS</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><button onclick="showPage('dashboard')" id="nav-dashboard" class="active"><span class="icon">📊</span> Dashboard</button></li>
+                    <li><button onclick="showPage('students')" id="nav-students"><span class="icon">👥</span> Students</button></li>
+                    <li><button onclick="showPage('attendance')" id="nav-attendance"><span class="icon">📅</span> Attendance</button></li>
+                    <li><button onclick="showPage('complaints')" id="nav-complaints"><span class="icon">⚠️</span> Complaints</button></li>
+                    <li><button onclick="showPage('notices')" id="nav-notices"><span class="icon">🔔</span> Notices</button></li>
+                    <li><button onclick="showPage('events')" id="nav-events"><span class="icon">🎉</span> Events</button></li>
+                    <li><button onclick="showPage('transport')" id="nav-transport"><span class="icon">🚌</span> Transport</button></li>
+                    <li><button onclick="showPage('placements')" id="nav-placements"><span class="icon">💼</span> Placements</button></li>
+                    <li><button onclick="showPage('settings')" id="nav-settings"><span class="icon">⚙️</span> Settings</button></li>
+                    <li><button onclick="showPage('about')" id="nav-about"><span class="icon">ℹ️</span> About</button></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            <div class="clock-container">
+                <div id="system-clock">00:00:00</div>
+                <div id="system-date" style="font-size: 0.7rem; opacity: 0.6;">2026-04-27</div>
+            </div>
+
+            <!-- DASHBOARD -->
+            <section id="page-dashboard" class="page active">
+                <div class="action-bar">
+                    <h2 style="font-family: var(--font-mono); color: var(--cyan);">SYSTEM_OVERVIEW</h2>
+                    <button class="btn-primary" onclick="window.print()" style="background: var(--yellow);">Print Report</button>
+                </div>
+                <div class="dashboard-grid" id="stats-grid">
+                    <!-- Cards injected by JS -->
+                </div>
+                <div class="card" style="margin-top: 20px; height: 300px;">
+                    <h3>Campus Activity Feed</h3>
+                    <canvas id="activity-chart"></canvas>
+                </div>
+            </section>
+
+            <!-- STUDENTS -->
+            <section id="page-students" class="page">
+                <div class="action-bar">
+                    <input type="text" class="search-input" placeholder="Search student ID/Name..." id="student-search">
+                    <button class="btn-primary" onclick="openModal('student')">+ Add Student</button>
+                </div>
+                <div class="table-container">
+                    <table id="student-table">
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Roll No</th>
+                                <th>Branch</th>
+                                <th>Year</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ATTENDANCE -->
+            <section id="page-attendance" class="page">
+                <div class="action-bar">
+                    <button class="btn-primary" onclick="markAllPresent()">Mark All Present</button>
+                    <button class="btn-primary" onclick="exportAttendance()" style="background: var(--magenta);">Export CSV</button>
+                </div>
+                <div class="table-container">
+                    <table id="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendance-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- COMPLAINTS -->
+            <section id="page-complaints" class="page">
+                <div class="action-bar">
+                    <button class="btn-primary" onclick="openModal('complaint')">+ Raise Complaint</button>
+                </div>
+                <div class="dashboard-grid" id="complaints-list"></div>
+            </section>
+
+            <!-- NOTICES -->
+            <section id="page-notices" class="page">
+                <div class="action-bar">
+                    <button class="btn-primary" onclick="openModal('notice')">+ Add Notice</button>
+                </div>
+                <div id="notices-container" class="dashboard-grid"></div>
+            </section>
+
+            <!-- EVENTS -->
+            <section id="page-events" class="page">
+                <div class="action-bar">
+                    <button class="btn-primary" onclick="openModal('event')">+ Add Event</button>
+                </div>
+                <div id="events-container" class="dashboard-grid"></div>
+            </section>
+
+            <!-- TRANSPORT -->
+            <section id="page-transport" class="page">
+                <div class="action-bar">
+                    <button class="btn-primary" onclick="openModal('bus')">+ Add Bus Route</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bus No</th>
+                                <th>Route</th>
+                                <th>Driver</th>
+                                <th>Contact</th>
+                                <th>Seats</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bus-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PLACEMENTS -->
+            <section id="page-placements" class="page">
+                <div class="action-bar">
+                    <button class="btn-primary" onclick="openModal('placement')">+ Add Drive</button>
+                </div>
+                <div id="placements-list" class="dashboard-grid"></div>
+            </section>
+
+            <!-- SETTINGS -->
+            <section id="page-settings" class="page">
+                <div class="card" style="max-width: 600px;">
+                    <h3>System Configuration</h3>
+                    <div style="margin-top: 2rem;">
+                        <label style="display: block; margin-bottom: 1rem;">Primary System Hue:</label>
+                        <input type="color" id="theme-color" value="#00ffff" onchange="changeThemeHue(this.value)">
+                        
+                        <div style="margin-top: 2rem;">
+                            <button class="btn-primary" onclick="downloadBackup()">Download System Backup (JSON)</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABOUT -->
+            <section id="page-about" class="page">
+                <div class="card">
+                    <h3>SYSTEM_INFO</h3>
+                    <p style="margin-top: 1rem; line-height: 1.6; opacity: 0.8;">
+                        Smart Campus Tracker (SCT) v4.0.2.<br>
+                        Developed for high-efficiency campus management.<br><br>
+                        This system utilizes local hyper-storage (LocalStorage) for zero-latency data persistence.<br>
+                        Encrypted aesthetic modules active: Glitch_Core, Neon_Pulse.<br><br>
+                        Author: Kusuma Sri Saranya
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content" id="modal-content">
+            <h2 id="modal-title">MODAL_TITLE</h2>
+            <form id="modal-form" class="modal-form">
+                <!-- Fields injected by JS -->
+            </form>
+            <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                <button class="btn-primary" style="background: transparent; color: white;" onclick="closeModal()">Abort</button>
+                <button class="btn-primary" id="modal-submit-btn">Commit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
